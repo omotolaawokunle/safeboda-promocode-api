@@ -14,3 +14,5 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post('/api/promocodes/create', ['as' => 'promo-code-create', 'uses' => 'PromoCodeController@store']);

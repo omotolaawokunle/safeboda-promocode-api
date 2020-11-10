@@ -17,7 +17,8 @@ class CreatePromoCodesTable extends Migration
             $table->id();
             $table->string('code', 255);
             $table->decimal('radius');
-            $table->dateTime('expires_at');
+            $table->double('ride_worth');
+            $table->date('expires_at');
             $table->softDeletes();
             $table->timestamps();
         });
