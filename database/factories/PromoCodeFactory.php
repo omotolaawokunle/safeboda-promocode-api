@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\User;
+use App\PromoCode;
 use Faker\Generator as Faker;
 
 /*
@@ -16,9 +16,11 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(PromoCode::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
+        'code' => (new PromoCode)->generateCode(),
+        'radius' => 50,
+        'ride_worth' => 500.50,
+        'expires_at' => '2020/11/13'
     ];
 });

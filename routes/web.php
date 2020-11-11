@@ -15,4 +15,13 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/api/promocodes/create', ['as' => 'promo-code-create', 'uses' => 'PromoCodeController@store']);
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->group(['prefix' => 'coupons'], function () use ($router) {
+        $router->post('create', ['as' => 'promo-code-create', 'uses' => 'PromoCodeController@store']);
+    });
+    $router->group(['prefix' => 'coupons/{id}'], function () use ($router) {
+        $router->get('deactivate', ['as' => 'promo-code-deactivate', 'uses' => 'PromoCodeController@deactivate']);
+    });
+});
+
+

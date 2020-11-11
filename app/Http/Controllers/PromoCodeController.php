@@ -37,4 +37,13 @@ class PromoCodeController extends Controller
         return $validator;
     }
 
+    public function deactivate($id)
+    {
+        $promoCode = PromoCode::find($id);
+        if ($promoCode) {
+            $promoCode->delete();
+            return response()->json(['deactivated' => true]);
+        }
+        return response()->json(['deactivated' => false], 404);
+    }
 }
