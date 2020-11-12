@@ -4,10 +4,22 @@ namespace App\Http\Controllers;
 
 use App\PromoCode;
 use Illuminate\Http\Request;
+use App\Http\Resources\PromoCodeResource;
 use Illuminate\Support\Facades\Validator;
 
 class PromoCodeController extends Controller
 {
+
+    public function index()
+    {
+        $type = request()->input('type', 'active');
+        if ($type === 'all') {
+            $promoCodes = PromoCodeResource::collection(PromoCode::withTrashed()->get());
+        } else {
+            $promoCodes = PromoCodeResource::collection(PromoCode::all())->hide(['deleted_at']);
+        }
+        return response()->json(['promoCodes' => ($promoCodes)], 200);
+    }
 
     public function store(Request $request)
     {

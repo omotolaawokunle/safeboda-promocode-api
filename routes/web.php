@@ -17,6 +17,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'coupons'], function () use ($router) {
+        $router->get('/', ['as' => 'promo-codes', 'uses' => 'PromoCodeController@index']);
         $router->post('create', ['as' => 'promo-code-create', 'uses' => 'PromoCodeController@store']);
     });
     $router->group(['prefix' => 'coupons/{id}'], function () use ($router) {
