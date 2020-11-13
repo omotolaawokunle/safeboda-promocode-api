@@ -7,7 +7,7 @@ class PromoCodeCreationTest extends TestCase
 {
     use DatabaseMigrations;
     /**
-     * Test successful promo code creation
+     * Test promo code creation endpoint
      *
      * @return void
      */
@@ -21,6 +21,11 @@ class PromoCodeCreationTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test promo code creation endpoint for validation errors
+     *
+     * @return void
+     */
     public function testCreationValidationError()
     {
         $response = $this->post(route('promo-code-create'), []);
@@ -30,57 +35,4 @@ class PromoCodeCreationTest extends TestCase
         $response->assertResponseStatus(422);
     }
 
-    public function testRadiusIsRequired()
-    {
-        $response = $this->post(route('promo-code-create'), ['ride_worth' => 500.50, 'expires_at' => '2020/11/13']);
-        $response->seeJson([
-            'radius' => ["The radius field is required."],
-        ]);
-        $response->assertResponseStatus(422);
-    }
-
-    public function testRadiusIsNumerical()
-    {
-        $response = $this->post(route('promo-code-create'), ['radius' => "50m", 'ride_worth' => 500.50, 'expires_at' => '2020/11/13']);
-        $response->seeJson([
-            'radius' => ["The radius must be a number."],
-        ]);
-        $response->assertResponseStatus(422);
-    }
-
-    public function testRideWorthIsRequired()
-    {
-        $response = $this->post(route('promo-code-create'), ['radius' => 50, 'expires_at' => '2020/11/13']);
-        $response->seeJson([
-            'ride_worth' => ["The ride worth field is required."],
-        ]);
-        $response->assertResponseStatus(422);
-    }
-
-    public function testRideWorthIsNumerical()
-    {
-        $response = $this->post(route('promo-code-create'), ['radius' => 50, 'ride_worth' => "#500.50", 'expires_at' => '2020/11/13']);
-        $response->seeJson([
-            'ride_worth' => ["The ride worth must be a number."],
-        ]);
-        $response->assertResponseStatus(422);
-    }
-
-    public function testExpiresAtIsRequired()
-    {
-        $response = $this->post(route('promo-code-create'), ['radius' => 50, 'ride_worth' => 500.50]);
-        $response->seeJson([
-            'expires_at' => ["The expiry date field is required."],
-        ]);
-        $response->assertResponseStatus(422);
-    }
-
-    public function testExpiresAtIsDate()
-    {
-        $response = $this->post(route('promo-code-create'), ['radius' => 50, 'ride_worth' => 500.50, 'expires_at' => '12ab/2ab']);
-        $response->seeJson([
-            'expires_at' => ["The expiry date is not a valid date."],
-        ]);
-        $response->assertResponseStatus(422);
-    }
 }

@@ -7,7 +7,7 @@ class PromoCodeDeactivationTest extends TestCase
 {
     use DatabaseMigrations;
     /**
-     * Test successful promo code creation
+     * Test promo code deactivation endpoint
      *
      * @return void
      */
@@ -22,6 +22,11 @@ class PromoCodeDeactivationTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test promo code deactivation endpoint for non-existent promo code
+     *
+     * @return void
+     */
     public function testPromoCodeNotFound()
     {
         $response = $this->get(route('promo-code-deactivate', ['id' => 200]));

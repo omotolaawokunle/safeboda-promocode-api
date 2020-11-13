@@ -6,7 +6,7 @@ class PromoCodeValidityTest extends TestCase
 {
     use DatabaseMigrations;
     /**
-     * Test successful promo code creation
+     * Test promo code validity endpoint
      *
      * @return void
      */
@@ -29,6 +29,11 @@ class PromoCodeValidityTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test promo code validity endpoint for an invalid promo code
+     *
+     * @return void
+     */
     public function testPromoCodeIsInvalid()
     {
         $promoCode = factory(App\PromoCode::class)->create();
@@ -47,6 +52,11 @@ class PromoCodeValidityTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test promo code validity endpoint for non existent promo code
+     *
+     * @return void
+     */
     public function testPromoCodeNotFound()
     {
         $response = $this->post(
@@ -64,7 +74,3 @@ class PromoCodeValidityTest extends TestCase
         $response->assertResponseStatus(404);
     }
 }
-
-//7.760891 4.5329985
-//7.7634697 4.5341617
-//7.7650869 4.5375614

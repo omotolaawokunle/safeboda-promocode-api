@@ -8,7 +8,7 @@ class PromoCodeRetrievalTest extends TestCase
 {
     use DatabaseMigrations;
     /**
-     * Test successful promo code creation
+     * Test all promo codes retrieval endpoint
      *
      * @return void
      */
@@ -26,6 +26,11 @@ class PromoCodeRetrievalTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test active promo codes retrieval endpoint
+     *
+     * @return void
+     */
     public function testReturnActivePromoCodes()
     {
         $promoCodes = factory(App\PromoCode::class, 10)->create();
@@ -40,6 +45,11 @@ class PromoCodeRetrievalTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test promo codes retrieval endpoint for no promo codes
+     *
+     * @return void
+     */
     public function testNoPromoCodes()
     {
         $response = $this->get(route('promo-codes'));

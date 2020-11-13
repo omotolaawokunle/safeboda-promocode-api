@@ -7,7 +7,7 @@ class PromoCodeRadiusConfigurationTest extends TestCase
 {
     use DatabaseMigrations;
     /**
-     * Test successful promo code creation
+     * Test promo code radius configuration endpoint
      *
      * @return void
      */
@@ -25,6 +25,11 @@ class PromoCodeRadiusConfigurationTest extends TestCase
         $response->assertResponseStatus(200);
     }
 
+    /**
+     * Test promo code radius configuration endpoint for validation errors
+     *
+     * @return void
+     */
     public function testRadiusConfigValidationError()
     {
         $promoCode = factory(App\PromoCode::class)->create();
@@ -35,6 +40,11 @@ class PromoCodeRadiusConfigurationTest extends TestCase
         $response->assertResponseStatus(422);
     }
 
+    /**
+     * Test promo code radius configuration endpoint for non-existent promo code
+     *
+     * @return void
+     */
     public function testPromoCodeNotFound()
     {
         $response = $this->put(

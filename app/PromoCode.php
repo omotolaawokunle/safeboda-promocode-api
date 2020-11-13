@@ -53,7 +53,6 @@ class PromoCode extends Model
      * @param float $earthRadius Mean earth radius in [meters]
      * @return float Distance between points in [meters] (same as earthRadius)
      */
-    //To get the result in miles, you could e.g. pass 3959 miles as $earthRadius
     public static function vincentyGreatCircleDistance(
         $latitudeFrom,
         $longitudeFrom,
@@ -76,6 +75,13 @@ class PromoCode extends Model
         return $angle * $earthRadius;
     }
 
+    /**
+     * Check if promo code is valid
+     *
+     * @param array $origin
+     * @param array $venue
+     * @return boolean
+     */
     public function isValid($origin, $venue)
     {
         $distance = self::vincentyGreatCircleDistance($origin['lat'], $origin['lon'], $venue['lat'], $venue['lon']);
