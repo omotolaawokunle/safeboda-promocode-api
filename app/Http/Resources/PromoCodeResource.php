@@ -32,6 +32,7 @@ class PromoCodeResource extends JsonResource
             'radius' => $this->radius,
             'ride_worth' => $this->ride_worth,
             'created_at' => $this->created_at,
+            'expires_at' => $this->expires_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
         ]);

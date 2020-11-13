@@ -17,11 +17,13 @@ class PromoCodeRetrievalTest extends TestCase
         $promoCodes = factory(App\PromoCode::class, 10)->create();
         $this->call("GET", route('promo-code-deactivate', ['id' => $promoCodes[rand(0, 9)]->id]));
         $this->call("GET", route('promo-code-deactivate', ['id' => $promoCodes[rand(0, 9)]->id]));
-        $this->get(route('promo-codes', ['type' => 'all']))->seeJsonStructure([
+        $response = $this->get(route('promo-codes', ['type' => 'all']));
+        $response->seeJsonStructure([
             'promoCodes' => ['*' => [
-                'id', 'code', 'radius', 'ride_worth', 'created_at', 'updated_at', 'deleted_at'
+                'id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at', 'deleted_at'
             ]]
-        ])->assertResponseStatus(200);
+        ]);
+        $response->assertResponseStatus(200);
     }
 
     public function testReturnActivePromoCodes()
@@ -29,10 +31,21 @@ class PromoCodeRetrievalTest extends TestCase
         $promoCodes = factory(App\PromoCode::class, 10)->create();
         $this->call("GET", route('promo-code-deactivate', ['id' => $promoCodes[rand(0, 9)]->id]));
         $this->call("GET", route('promo-code-deactivate', ['id' => $promoCodes[rand(0, 9)]->id]));
-        $this->get(route('promo-codes'))->seeJsonStructure([
+        $response = $this->get(route('promo-codes'));
+        $response->seeJsonStructure([
             'promoCodes' => ['*' => [
-                'id', 'code', 'radius', 'ride_worth', 'created_at', 'updated_at',
+                'id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at',
             ]]
-        ])->assertResponseStatus(200);
+        ]);
+        $response->assertResponseStatus(200);
+    }
+
+    public function testNoPromoCodes()
+    {
+        $response = $this->get(route('promo-codes'));
+        $response->seeJsonStructure([
+            'promoCodes' => []
+        ]);
+        $response->assertResponseStatus(200);
     }
 }

@@ -15,15 +15,19 @@ class PromoCodeDeactivationTest extends TestCase
     {
         $promoCode = factory(App\PromoCode::class)->create();
 
-        $this->get(route('promo-code-deactivate', ['id' => $promoCode->id]))->seeJson([
-            'deactivated' => true,
-        ])->assertResponseStatus(200);
+        $response = $this->get(route('promo-code-deactivate', ['id' => $promoCode->id]));
+        $response->seeJsonStructure([
+            'message',
+        ]);
+        $response->assertResponseStatus(200);
     }
 
     public function testPromoCodeNotFound()
     {
-        $this->get(route('promo-code-deactivate', ['id' => 200]))->seeJson([
-            'deactivated' => false,
-        ])->assertResponseStatus(404);
+        $response = $this->get(route('promo-code-deactivate', ['id' => 200]));
+        $response->seeJsonStructure([
+            'error',
+        ]);
+        $response->assertResponseStatus(404);
     }
 }
