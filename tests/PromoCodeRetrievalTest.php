@@ -20,7 +20,7 @@ class PromoCodeRetrievalTest extends TestCase
         $response = $this->get(route('promo-codes', ['type' => 'all']));
         $response->seeJsonStructure([
             'promoCodes' => ['*' => [
-                'id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at', 'deleted_at'
+                'id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'deleted_at'
             ]]
         ]);
         $response->assertResponseStatus(200);
@@ -39,7 +39,7 @@ class PromoCodeRetrievalTest extends TestCase
         $response = $this->get(route('promo-codes'));
         $response->seeJsonStructure([
             'promoCodes' => ['*' => [
-                'id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at',
+                'id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at'
             ]]
         ]);
         $response->assertResponseStatus(200);

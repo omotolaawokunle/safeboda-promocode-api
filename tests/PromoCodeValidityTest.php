@@ -17,13 +17,12 @@ class PromoCodeValidityTest extends TestCase
             route('promo-code-validity', ['id' => $promoCode->id]),
             [
                 'origin' => ['lat' => 7.7634697, 'lon' => 4.5341617],
-                'destination' => ['lat' => 7.7650869, 'lon' => 4.5375614],
-                'event' => ['lat' => 7.760891, 'lon' => 4.5329985]
+                'destination' => ['lat' => 7.760891, 'lon' => 4.5329985],
             ]
         );
 
         $response->seeJsonStructure([
-            'promoCode' => ['id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at'],
+            'promoCode' => ['id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at'],
             'polyline'
         ]);
         $response->assertResponseStatus(200);
@@ -42,14 +41,25 @@ class PromoCodeValidityTest extends TestCase
             [
                 'origin' => ['lat' => 4.7634697, 'lon' => 2.5341617],
                 'destination' => ['lat' => 3.7650869, 'lon' => 8.5375614],
-                'event' => ['lat' => 7.760891, 'lon' => 4.5329985]
             ]
         );
-
         $response->seeJsonStructure([
             'error'
         ]);
-        $response->assertResponseStatus(200);
+        $response->assertResponseStatus(400);
+    }
+
+    /**
+     * Test promo code validity endpoint for validation errors
+     *
+     * @return void
+     */
+    public function testPromoCodeValidityValidationError()
+    {
+        $promoCode = factory(App\PromoCode::class)->create();
+        $response = $this->post(route('promo-code-validity', ['id' => $promoCode->id]), []);
+        $response->seeJsonStructure(['errors' => [],]);
+        $response->assertResponseStatus(422);
     }
 
     /**

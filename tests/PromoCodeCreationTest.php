@@ -13,12 +13,11 @@ class PromoCodeCreationTest extends TestCase
      */
     public function testCreationSuccess()
     {
-        $response = $this->post(route('promo-code-create'), ['radius' => 50, 'ride_worth' => 500.50, 'expires_at' => '2020/11/13']);
+        $response = $this->post(route('promo-code-create'), ['radius' => 50, 'ride_worth' => 500.50, 'expires_at' => date('Y-m-d', strtotime("+3 days"))]);
 
-        $response->seeJsonStructure([
-            'promoCode' => ['id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at'],
+        $response->seeJsonStructure(['promoCode' => ['id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at'],
         ]);
-        $response->assertResponseStatus(200);
+        $response->assertResponseStatus(201);
     }
 
     /**

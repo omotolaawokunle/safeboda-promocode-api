@@ -48,7 +48,7 @@ class PromoCodeController extends Controller
             'ride_worth' => $request->ride_worth,
         ]);
 
-        return response()->json(['promoCode' => (new PromoCodeResource($promoCode))->hide(['deleted_at'])], 200);
+        return response()->json(['promoCode' => (new PromoCodeResource($promoCode))->hide(['deleted_at'])], 201);
     }
 
     /**
@@ -82,15 +82,16 @@ class PromoCodeController extends Controller
         $promoCode = PromoCode::find($id);
 
         //Return 404 if promo code is non-existent or not active
-        if (!$promoCode || !$this->isActive($promoCode)) return response()->json(['error' => 'Promo code not found'], 404);
+        if (!$promoCode || !$this->isActive($promoCode)) {
+            return response()->json(['error' => 'Promo code not found'], 404);
+        }
 
         $validator = $this->validateShowPromoCode($request);
         if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
 
-        $data = $request->only('origin', 'destination', 'event');
+        $data = $request->only('origin', 'destination');
         if (
-            $promoCode->isValid($data["origin"], $data["event"]) ||
-            $promoCode->isValid($data["destination"], $data["event"])
+            $promoCode->isValid($data["origin"], $data["destination"])
         ) {
             $promoCode = (new PromoCodeResource($promoCode))->hide(['deleted_at']);
             $polyline = Polyline::encode([
@@ -100,7 +101,7 @@ class PromoCodeController extends Controller
             return response()->json(['promoCode' => $promoCode, 'polyline' => $polyline], 200);
         }
 
-        return response()->json(['error' => "Promo code is not valid"], 200);
+        return response()->json(['error' => "Promo code is not valid"], 400);
     }
 
     /**
@@ -111,15 +112,13 @@ class PromoCodeController extends Controller
      */
     private function validateShowPromoCode(Request $request)
     {
-        $customAttributes = ['origin.lon' => 'Origin Longitude', 'origin.lat' => 'Origin Latitude', 'destination.lon' => 'Destination Longitude', 'destination.lat' => 'Destination Latitude', 'event.lon' => 'Event Venue Longitude', 'event.lat' => 'Event Venue Latitude'];
+        $customAttributes = ['origin.lon' => 'Origin Longitude', 'origin.lat' => 'Origin Latitude', 'destination.lon' => 'Destination Longitude', 'destination.lat' => 'Destination Latitude'];
 
         $validator = Validator::make($request->all(), [
             'origin.lon' => 'required|numeric',
             'origin.lat' => 'required|numeric',
             'destination.lon' => 'required|numeric',
             'destination.lat' => 'required|numeric',
-            'event.lon' => 'required|numeric',
-            'event.lat' => 'required|numeric',
         ], $customAttributes);
         return $validator;
     }

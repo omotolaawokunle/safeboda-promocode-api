@@ -21,6 +21,6 @@ $factory->define(PromoCode::class, function (Faker $faker) {
         'code' => (new PromoCode)->generateCode(),
         'radius' => 1000,
         'ride_worth' => 500.50,
-        'expires_at' => '2020/11/13'
+        'expires_at' => date('Y-m-d', strtotime("+3 days"))
     ];
 });

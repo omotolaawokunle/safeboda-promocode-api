@@ -19,8 +19,7 @@ class PromoCodeRadiusConfigurationTest extends TestCase
             ['radius' => 500]
         );
 
-        $response->seeJsonStructure([
-            'promoCode' => ['id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at', 'updated_at'],
+        $response->seeJsonStructure(['promoCode' => ['id', 'code', 'radius', 'ride_worth', 'created_at', 'expires_at'],
         ]);
         $response->assertResponseStatus(200);
     }
