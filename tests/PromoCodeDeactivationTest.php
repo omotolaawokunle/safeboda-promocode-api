@@ -15,7 +15,7 @@ class PromoCodeDeactivationTest extends TestCase
     {
         $promoCode = factory(App\PromoCode::class)->create();
 
-        $response = $this->get(route('promo-code-deactivate', ['id' => $promoCode->id]));
+        $response = $this->put(route('promo-code-deactivate', ['id' => $promoCode->id]));
         $response->seeJsonStructure([
             'message',
         ]);
@@ -29,7 +29,7 @@ class PromoCodeDeactivationTest extends TestCase
      */
     public function testPromoCodeNotFound()
     {
-        $response = $this->get(route('promo-code-deactivate', ['id' => 200]));
+        $response = $this->put(route('promo-code-deactivate', ['id' => 200]));
         $response->seeJsonStructure([
             'error',
         ]);

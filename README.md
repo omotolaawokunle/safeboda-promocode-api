@@ -227,7 +227,7 @@ Update promo code radius
             }
         }
     ```
-### GET | Deactivate a Promo Code [/api/coupons/{id}/deactivate]
+### PUT | Deactivate a Promo Code [/api/coupons/{id}/deactivate]
 + Response 200
 ```json
     {
